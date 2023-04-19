@@ -14,6 +14,7 @@ module.exports = {
         phone: Joi.string()
           .pattern(/^(\([0-9]{3}\)\s*|[0-9]{3}-)[0-9]{3}-[0-9]{4}$/)
           .required(),
+        favorite: Joi.boolean().optional(),
       });
       await schema.validateAsync(input);
       next();
@@ -23,8 +24,8 @@ module.exports = {
   },
   patchContactValidation: (req, res, next) => {
     const schema = Joi.object({
-      topic: Joi.string().alphanum().min(3).max(30).optional(),
-      text: Joi.string().alphanum().min(10).max(400).optional(),
+      name: Joi.string().alphanum().min(3).max(30).optional(),
+      email: Joi.string().alphanum().min(10).max(400).optional(),
     });
 
     validationResult = schema.validate(req.body);

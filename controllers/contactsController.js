@@ -4,7 +4,8 @@ const {
   addContact,
   removeContact,
   updateContact,
-} = require("../contacts");
+  partChangeContact,
+} = require("../src/services/contactsServices");
 
 async function getContacts(req, res) {
   const contacts = await listContacts();
@@ -29,8 +30,8 @@ async function getYourContactById(req, res) {
 
 async function addYourContact(req, res) {
   try {
-    const { name, email, phone } = req.body;
-    const addedContact = await addContact(name, email, phone);
+    const { name, email, phone, favorite } = req.body;
+    const addedContact = await addContact({ name, email, phone, favorite });
 
     return res
       .status(200)
@@ -58,21 +59,27 @@ async function changeContact(req, res) {
   }
 }
 
-const patchContact = (req, res) => {
-  const { topic, text } = req.body;
+async function patchContact(req, res) {
+  const { name, email, phone, favorite } = req.body;
 
-  posts.forEach((post) => {
-    if (post.id === req.params.id) {
-      if (topic) {
-        post.topic = topic;
+  posts.forEach((contact) => {
+    if (contact.id === req.params.id) {
+      if (name) {
+        contact.name = name;
       }
-      if (text) {
-        post.text = text;
+      if (email) {
+        contact.email = email;
+      }
+      if (phone) {
+        contact.phone = phone;
+      }
+      if (favorite) {
+        contact.favorite = favorite;
       }
     }
   });
   res.json({ status: "success" });
-};
+}
 
 async function deleteContact(req, res) {
   const { id } = req.params;
